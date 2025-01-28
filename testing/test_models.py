@@ -16,7 +16,7 @@ mood_encoder.classes_ = np.array(['happy', 'sad', 'neutral'])
 
 # For disease
 disease_encoder = LabelEncoder()
-disease_encoder.classes_ = np.array(['parkinson', 'brain_tumor', 'brain_stroke', 'alzheimer', 'epilepsy', 'migraine'])  # Replace with actual classes if saved
+disease_encoder.classes_ = np.array(['parkinson', 'brain_tumor', 'brain_stroke', 'alzheimer', 'epilepsy', 'migraine'])
 
 # Sample data for testing
 sample_data = {
