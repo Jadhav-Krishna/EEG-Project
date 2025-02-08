@@ -4,19 +4,21 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
+# Load the trained models
 mood_classifier = load_model('models/mood_classifier.h5')
 health_predictor = load_model('models/health_predictor.h5')
 disease_predictor = load_model('models/disease_predictor.h5')
 
+# Load label encoders (if saved during training)
 # For mood
 mood_encoder = LabelEncoder()
-mood_encoder.classes_ = np.array(['happy', 'sad', 'neutral'])
+mood_encoder.classes_ = np.array(['happy', 'sad', 'neutral'])  # Replace with actual classes if saved
 
 # For disease
 disease_encoder = LabelEncoder()
-disease_encoder.classes_ = np.array(['parkinson', 'brain_tumor', 'brain_stroke', 'alzheimer', 'epilepsy', 'migraine'])
+disease_encoder.classes_ = np.array(['parkinson', 'brain_tumor', 'brain_stroke', 'alzheimer', 'epilepsy', 'migraine'])  # Replace with actual classes if saved
 
 # Sample data for testing
 sample_data = {
@@ -71,19 +73,29 @@ print("Sample Data with Predictions:")
 print(sample_df[['eeg_1', 'eeg_2', 'mood_encoded', 'predicted_mood', 'predicted_health', 'predicted_disease']])
 
 # True labels for accuracy calculation
-true_mood = ['happy', 'sad', 'neutral']
-true_health = ['healthy', 'unhealthy', 'unhealthy']
-true_disease = ['none', 'parkinson', 'brain_tumor']
+true_mood = ['happy', 'sad', 'neutral']  # Ensure this matches the number of samples
+true_health = ['healthy', 'unhealthy', 'unhealthy']  # Ensure this matches the number of samples
+true_disease = ['none', 'parkinson', 'brain_tumor']  # Ensure this matches the number of samples
 
-# Calculate accuracy
-mood_accuracy = accuracy_score(true_mood, sample_df['predicted_mood'])
-health_accuracy = accuracy_score(true_health, sample_df['predicted_health'])
-disease_accuracy = accuracy_score(true_disease, sample_df['predicted_disease'])
+# Calculate metrics for mood prediction
+print("\nMood Prediction Metrics:")
+print(classification_report(
+    true_mood, 
+    sample_df['predicted_mood'], 
+    target_names=mood_encoder.classes_,
+    zero_division=0  # Suppress warnings
+))
 
-print(f"\nMood Prediction Accuracy: {mood_accuracy * 100:.2f}%")
-print(f"Health Prediction Accuracy: {health_accuracy * 100:.2f}%")
-print(f"Disease Prediction Accuracy: {disease_accuracy * 100:.2f}%")
-
+# Calculate metrics for disease prediction
+unique_disease_classes = np.unique(np.concatenate([true_disease, sample_df['predicted_disease']]))
+print("\nDisease Prediction Metrics:")
+print(classification_report(
+    true_disease, 
+    sample_df['predicted_disease'], 
+    labels=unique_disease_classes,
+    target_names=unique_disease_classes,
+    zero_division=0
+))
 # Generate Graphs
 sns.set(style="whitegrid")
 
