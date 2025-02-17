@@ -52,6 +52,16 @@ y_pred = model.predict(X_test).argmax(axis=1)
 print("\nMood Classification Metrics:")
 print(classification_report(y_test, y_pred, target_names=label_encoder.classes_, zero_division=0))
 
+# New: Calculate and print specific precision, recall, and F1 score for each class
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+precision = precision_score(y_test, y_pred, average=None, zero_division=0)
+recall = recall_score(y_test, y_pred, average=None, zero_division=0)
+f1 = f1_score(y_test, y_pred, average=None, zero_division=0)
+
+for idx, class_name in enumerate(label_encoder.classes_):
+    print(f"{class_name} - Precision: {precision[idx]:.2f}, Recall: {recall[idx]:.2f}, F1 Score: {f1[idx]:.2f}")
+
 # Confusion Matrix
 cm = confusion_matrix(y_test, y_pred)
 plt.figure(figsize=(8, 6))
