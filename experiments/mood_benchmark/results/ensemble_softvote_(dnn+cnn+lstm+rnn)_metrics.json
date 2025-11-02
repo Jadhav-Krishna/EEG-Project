@@ -1,0 +1,57 @@
+{
+  "model": "Ensemble SoftVote (DNN+CNN+LSTM+RNN)",
+  "target": "mood",
+  "classes": [
+    "happy",
+    "neutral",
+    "sad"
+  ],
+  "params": 0,
+  "train_seconds": 0.0,
+  "accuracy": 0.936,
+  "macro_f1": 0.860026045472407,
+  "weighted_f1": 0.9271267661071113,
+  "macro_precision": 0.9437802819968425,
+  "macro_recall": 0.825271392081737,
+  "roc_auc_ovr": 0.998054927043743,
+  "confusion_matrix": [
+    [
+      77,
+      0,
+      0
+    ],
+    [
+      1,
+      14,
+      14
+    ],
+    [
+      0,
+      1,
+      143
+    ]
+  ],
+  "per_class": {
+    "happy": {
+      "precision": 0.9871794871794872,
+      "recall": 1.0,
+      "f1": 0.9935483870967742
+    },
+    "neutral": {
+      "precision": 0.9333333333333333,
+      "recall": 0.4827586206896552,
+      "f1": 0.6363636363636364
+    },
+    "sad": {
+      "precision": 0.910828025477707,
+      "recall": 0.9930555555555556,
+      "f1": 0.9501661129568106
+    }
+  },
+  "base_models": [
+    "dnn_baseline.h5",
+    "cnn_1d.h5",
+    "lstm.h5",
+    "rnn.h5"
+  ]
+}
