@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv1D, BatchNormalization, ReLU, MaxPooling1D, LSTM, Dropout, Dense, Bidirectional
-from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 
 from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics, get_fit_kwargs
 
@@ -46,9 +46,12 @@ def train_and_evaluate(target: str = 'mood'):
 
     model = build_model(X_train_seq.shape[1], len(class_names))
 
+    # Save best weights by validation accuracy to push top-line accuracy higher.
+    weights_path = os.path.join(os.path.dirname(__file__), 'results', f"cnn_lstm_{target}.weights.h5")
     callbacks = [
-        EarlyStopping(monitor='val_loss', patience=12, restore_best_weights=True),
-        ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5)
+        EarlyStopping(monitor='val_accuracy', patience=15, restore_best_weights=True),
+        ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=6, min_lr=1e-5),
+        ModelCheckpoint(weights_path, monitor='val_accuracy', save_best_only=True, save_weights_only=True)
     ]
 
     start = time.time()
@@ -56,7 +59,7 @@ def train_and_evaluate(target: str = 'mood'):
     history = model.fit(
         X_train_seq, y_train,
         validation_split=0.2,
-        epochs=100,
+        epochs=150,
         batch_size=32,
         callbacks=callbacks,
         verbose=0,
@@ -64,6 +67,11 @@ def train_and_evaluate(target: str = 'mood'):
     )
     train_seconds = time.time() - start
 
+    # Ensure we evaluate with the best weights (ModelCheckpoint wrote to weights_path)
+    try:
+        model.load_weights(weights_path)
+    except Exception:
+        pass
     y_prob = model.predict(X_test_seq, verbose=0)
     metrics = compute_metrics(y_test, y_prob, class_names)
 

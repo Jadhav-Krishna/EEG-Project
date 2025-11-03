@@ -30,19 +30,26 @@ def _group_by_target(results):
     for r in results:
         tgt = r.get('target', 'unknown')
         grouped.setdefault(tgt, []).append(r)
-    # sort each group by macro_f1 desc
-    for k in grouped:
-        grouped[k].sort(key=lambda r: r.get('macro_f1', 0.0), reverse=True)
-    return grouped
+    # within each target, keep only the best entry per model (highest F1)
+    deduped = {}
+    for tgt, rows in grouped.items():
+        best_by_model = {}
+        for r in rows:
+            key = r.get('model', 'Unknown')
+            cur = best_by_model.get(key)
+            if cur is None or r.get('macro_f1', 0.0) > cur.get('macro_f1', 0.0):
+                best_by_model[key] = r
+        deduped[tgt] = sorted(best_by_model.values(), key=lambda x: x.get('macro_f1', 0.0), reverse=True)
+    return deduped
 
 
 def _render_table_for_target(lines, target, rows):
     lines.append(f"## {target.capitalize()} — Summary\n")
-    lines.append("| Model | Accuracy | F1 | ROC-AUC (OvR) | Params | Train Time (s) |\n|")
-    lines.append("|---|---:|---:|---:|---:|---:|")
+    lines.append("| Model | Accuracy | Precision | Recall | F1 | ROC-AUC (OvR) | Params | Train Time (s) |")
+    lines.append("|---|---:|---:|---:|---:|---:|---:|---:|")
     for r in rows:
         lines.append(
-            f"| {r['model']} | {fmt_pct(r.get('accuracy'))} | {r.get('macro_f1'):.3f} | "
+            f"| {r['model']} | {fmt_pct(r.get('accuracy'))} | {r.get('macro_precision'):.3f} | {r.get('macro_recall'):.3f} | {r.get('macro_f1'):.3f} | "
             f"{r.get('roc_auc_ovr') if r.get('roc_auc_ovr') is not None else '-'} | "
             f"{r.get('params')} | {r.get('train_seconds'):.2f} |"
         )

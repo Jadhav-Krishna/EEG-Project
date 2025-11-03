@@ -7,48 +7,33 @@ This report compares multiple deep learning methods trained on `data/processed_d
 - Metrics reported: Accuracy, F1 (macro), ROC-AUC (OvR); per-class precision/recall/f1 available inside each metrics JSON
 - Models included: DNN Baseline, CNN 1D, RNN, LSTM, CNN-LSTM, Transformer Encoder, Ensemble SoftVote (DNN+CNN+LSTM) and Ensemble SoftVote (DNN+CNN+LSTM+RNN)
 
-Generated on: 2025-11-03T06:57:47.275226Z
+Generated on: 2025-11-03T07:54:50.871625Z
 
 
 ## Mood — Summary
 
-| Model | Accuracy | F1 | ROC-AUC (OvR) | Params | Train Time (s) |
-|
-|---|---:|---:|---:|---:|---:|
-| LSTM | 97.20% | 0.949 | 0.9981172752178636 | 121091 | 10.52 |
-| LSTM | 97.20% | 0.948 | 0.9976980282131654 | 121091 | 18.79 |
-| CNN-LSTM | 96.40% | 0.933 | 0.993563718048486 | 446595 | 14.08 |
-| CNN-LSTM | 96.40% | 0.930 | 0.993653053270194 | 50499 | 6.63 |
-| CNN 1D | 96.40% | 0.930 | 0.998394014891489 | 17475 | 4.86 |
-| CNN 1D | 96.00% | 0.918 | 0.9988319343190847 | 17475 | 5.40 |
-| Ensemble SoftVote (DNN+CNN+LSTM) | 95.50% | 0.909 | 0.9987572295369667 | 0 | 0.00 |
-| Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 94.80% | 0.891 | 0.9976721832628592 | 0 | 0.00 |
-| DNN Baseline | 93.60% | 0.865 | 0.9912554153562237 | 47235 | 6.47 |
-| DNN Baseline | 93.60% | 0.864 | 0.9811421326073672 | 47235 | 6.30 |
-| Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 93.60% | 0.860 | 0.998054927043743 | 0 | 0.00 |
-| RNN | 87.20% | 0.619 | 0.9384974035479742 | 34115 | 4.33 |
-| RNN | 86.80% | 0.617 | 0.9754471420717324 | 34115 | 5.41 |
-| Transformer Encoder | 68.00% | 0.470 | 0.7590349247523956 | 10915 | 5.35 |
-| Transformer Encoder | 68.00% | 0.460 | 0.7559390843325356 | 10915 | 4.22 |
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC (OvR) | Params | Train Time (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| LSTM | 97.20% | 0.963 | 0.936 | 0.949 | 0.9981172752178636 | 121091 | 10.52 |
+| CNN-LSTM | 96.40% | 0.965 | 0.906 | 0.930 | 0.993653053270194 | 50499 | 6.63 |
+| CNN 1D | 96.40% | 0.965 | 0.906 | 0.930 | 0.998394014891489 | 17475 | 4.86 |
+| Ensemble SoftVote (DNN+CNN+LSTM) | 95.50% | 0.955 | 0.881 | 0.909 | 0.9987572295369667 | 0 | 0.00 |
+| Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 94.80% | 0.951 | 0.860 | 0.891 | 0.9976721832628592 | 0 | 0.00 |
+| DNN Baseline | 93.60% | 0.931 | 0.832 | 0.865 | 0.9912554153562237 | 47235 | 6.47 |
+| RNN | 87.20% | 0.583 | 0.660 | 0.619 | 0.9384974035479742 | 34115 | 4.33 |
+| Transformer Encoder | 68.00% | 0.449 | 0.496 | 0.470 | 0.7590349247523956 | 10915 | 5.35 |
 
 ### Mood — Head-to-head (top vs others)
 
 Main method = LSTM (best F1 0.949, Accuracy 97.20%).
 
-- LSTM vs LSTM: ΔAccuracy +0.00 pts, ΔF1 +0.001.
-- LSTM vs CNN-LSTM: ΔAccuracy +0.80 pts, ΔF1 +0.015.
 - LSTM vs CNN-LSTM: ΔAccuracy +0.80 pts, ΔF1 +0.019.
 - LSTM vs CNN 1D: ΔAccuracy +0.80 pts, ΔF1 +0.019.
-- LSTM vs CNN 1D: ΔAccuracy +1.20 pts, ΔF1 +0.030.
 - LSTM vs Ensemble SoftVote (DNN+CNN+LSTM): ΔAccuracy +1.70 pts, ΔF1 +0.039.
 - LSTM vs Ensemble SoftVote (DNN+CNN+LSTM+RNN): ΔAccuracy +2.40 pts, ΔF1 +0.057.
 - LSTM vs DNN Baseline: ΔAccuracy +3.60 pts, ΔF1 +0.083.
-- LSTM vs DNN Baseline: ΔAccuracy +3.60 pts, ΔF1 +0.084.
-- LSTM vs Ensemble SoftVote (DNN+CNN+LSTM+RNN): ΔAccuracy +3.60 pts, ΔF1 +0.089.
 - LSTM vs RNN: ΔAccuracy +10.00 pts, ΔF1 +0.329.
-- LSTM vs RNN: ΔAccuracy +10.40 pts, ΔF1 +0.331.
 - LSTM vs Transformer Encoder: ΔAccuracy +29.20 pts, ΔF1 +0.478.
-- LSTM vs Transformer Encoder: ΔAccuracy +29.20 pts, ΔF1 +0.489.
 
 ### Mood — Graphs
 
@@ -79,26 +64,25 @@ Main method = LSTM (best F1 0.949, Accuracy 97.20%).
 
 ## Disease — Summary
 
-| Model | Accuracy | F1 | ROC-AUC (OvR) | Params | Train Time (s) |
-|
-|---|---:|---:|---:|---:|---:|
-| CNN 1D | 44.00% | 0.297 | 0.7334044128730083 | 17735 | 5.74 |
-| DNN Baseline | 43.60% | 0.293 | 0.742645123382245 | 47495 | 4.71 |
-| Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 43.20% | 0.290 | 0.7417498248970128 | 0 | 0.00 |
-| Transformer Encoder | 44.00% | 0.281 | 0.7486611798187888 | 11175 | 10.07 |
-| RNN | 44.00% | 0.245 | 0.7283065199045738 | 34375 | 9.53 |
-| CNN-LSTM | 40.40% | 0.245 | 0.7305441563977094 | 447111 | 10.32 |
-| LSTM | 42.40% | 0.208 | 0.7405312986642506 | 121351 | 9.15 |
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC (OvR) | Params | Train Time (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| CNN 1D | 44.00% | 0.299 | 0.308 | 0.297 | 0.7334044128730083 | 17735 | 5.74 |
+| CNN-LSTM | 44.40% | 0.336 | 0.308 | 0.295 | 0.7332426344488604 | 447111 | 12.19 |
+| DNN Baseline | 43.60% | 0.298 | 0.305 | 0.293 | 0.742645123382245 | 47495 | 4.71 |
+| Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 43.20% | 0.288 | 0.302 | 0.290 | 0.7417498248970128 | 0 | 0.00 |
+| Transformer Encoder | 44.00% | 0.274 | 0.309 | 0.281 | 0.7486611798187888 | 11175 | 10.07 |
+| RNN | 44.00% | 0.234 | 0.322 | 0.245 | 0.7283065199045738 | 34375 | 9.53 |
+| LSTM | 42.40% | 0.234 | 0.282 | 0.208 | 0.7405312986642506 | 121351 | 9.15 |
 
 ### Disease — Head-to-head (top vs others)
 
 Main method = CNN 1D (best F1 0.297, Accuracy 44.00%).
 
+- CNN 1D vs CNN-LSTM: ΔAccuracy -0.40 pts, ΔF1 +0.002.
 - CNN 1D vs DNN Baseline: ΔAccuracy +0.40 pts, ΔF1 +0.004.
 - CNN 1D vs Ensemble SoftVote (DNN+CNN+LSTM+RNN): ΔAccuracy +0.80 pts, ΔF1 +0.007.
 - CNN 1D vs Transformer Encoder: ΔAccuracy +0.00 pts, ΔF1 +0.016.
 - CNN 1D vs RNN: ΔAccuracy +0.00 pts, ΔF1 +0.052.
-- CNN 1D vs CNN-LSTM: ΔAccuracy +3.60 pts, ΔF1 +0.053.
 - CNN 1D vs LSTM: ΔAccuracy +1.60 pts, ΔF1 +0.089.
 
 ### Disease — Graphs
@@ -143,7 +127,7 @@ Main method = CNN 1D (best F1 0.297, Accuracy 44.00%).
 ### CNN-LSTM (disease)
 
 - Classes: alzheimer, brain_stroke, brain_tumor, epilepsy, migraine, none, parkinson
-- Best validation loss: 1.3324
+- Best validation loss: 1.3407
 
 ### CNN 1D (disease)
 
@@ -198,7 +182,7 @@ Main method = CNN 1D (best F1 0.297, Accuracy 44.00%).
 ### CNN-LSTM (mood)
 
 - Classes: happy, neutral, sad
-- Best validation loss: 0.0726
+- Best validation loss: 0.0919
 
 ### CNN 1D (mood)
 

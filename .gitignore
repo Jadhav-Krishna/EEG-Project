@@ -1,3 +1,27 @@
 venv/
 __pycache__/
 .vscode/
+
+# Python cache
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# Model artifacts and results
+experiments/mood_benchmark/results/*.h5
+experiments/mood_benchmark/results/*.weights.h5
+experiments/mood_benchmark/results/*.keras
+experiments/mood_benchmark/results/*.ckpt*
+models/
+archive/
+
+# Plots and generated assets
+graphs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
