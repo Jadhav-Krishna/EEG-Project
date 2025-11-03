@@ -5,8 +5,10 @@ import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv1D, BatchNormalization, ReLU, MaxPooling1D, LSTM, Dropout, Dense, Bidirectional
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
+from tensorflow.keras.optimizers import AdamW
+from tensorflow.keras.optimizers.schedules import CosineDecayRestarts
 
-from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics, get_fit_kwargs
+from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics, get_fit_kwargs, set_global_seed
 
 
 def build_model(timesteps: int, num_classes: int) -> Model:
@@ -28,29 +30,54 @@ def build_model(timesteps: int, num_classes: int) -> Model:
     x = MaxPooling1D(pool_size=2)(x)
     x = Dropout(0.3)(x)
 
-    x = Bidirectional(LSTM(96))(x)
+    # Deeper BiLSTM head
+    x = Bidirectional(LSTM(96, return_sequences=True))(x)
+    x = Dropout(0.3)(x)
+    x = Bidirectional(LSTM(64, return_sequences=False))(x)
     x = Dropout(0.3)(x)
     x = Dense(128, activation='relu')(x)
     x = Dropout(0.3)(x)
     out = Dense(num_classes, activation='softmax')(x)
 
     model = Model(inp, out)
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
 
 
-def train_and_evaluate(target: str = 'mood'):
-    X_train, X_test, y_train, y_test, encoder, class_names = load_data(target=target, include_mean=True)
+def _make_loss(target: str):
+    if target == 'disease':
+        # Sparse categorical focal loss
+        def loss_fn(y_true, y_pred, gamma=2.0):
+            y_true = tf.cast(y_true, tf.int32)
+            y_true_onehot = tf.one_hot(y_true, depth=tf.shape(y_pred)[-1])
+            # Avoid log(0)
+            eps = tf.keras.backend.epsilon()
+            y_pred = tf.clip_by_value(y_pred, eps, 1.0 - eps)
+            pt = tf.reduce_sum(y_true_onehot * y_pred, axis=-1)
+            loss = -tf.pow(1.0 - pt, gamma) * tf.math.log(pt)
+            return tf.reduce_mean(loss)
+        return loss_fn
+    return 'sparse_categorical_crossentropy'
+
+
+def train_and_evaluate(target: str = 'mood', seed: int | None = None):
+    if seed is not None:
+        set_global_seed(seed)
+    include_aux_mood = (target == 'disease')
+    X_train, X_test, y_train, y_test, encoder, class_names = load_data(
+        target=target, include_mean=True, include_aux_mood=include_aux_mood)
     X_train_seq = shape_for_sequence(X_train)
     X_test_seq = shape_for_sequence(X_test)
 
     model = build_model(X_train_seq.shape[1], len(class_names))
+    # Optimizer with weight decay and cosine restarts
+    lr_schedule = CosineDecayRestarts(initial_learning_rate=1e-3, first_decay_steps=200, t_mul=2.0, m_mul=0.8, alpha=1e-4)
+    optimizer = AdamW(learning_rate=lr_schedule, weight_decay=1e-5)
+    model.compile(optimizer=optimizer, loss=_make_loss(target), metrics=['accuracy'])
 
     # Save best weights by validation accuracy to push top-line accuracy higher.
     weights_path = os.path.join(os.path.dirname(__file__), 'results', f"cnn_lstm_{target}.weights.h5")
     callbacks = [
         EarlyStopping(monitor='val_accuracy', patience=15, restore_best_weights=True),
-        ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=6, min_lr=1e-5),
         ModelCheckpoint(weights_path, monitor='val_accuracy', save_best_only=True, save_weights_only=True)
     ]
 
@@ -75,6 +102,10 @@ def train_and_evaluate(target: str = 'mood'):
     y_prob = model.predict(X_test_seq, verbose=0)
     metrics = compute_metrics(y_test, y_prob, class_names)
 
+    # Allow saving seed-specific metrics to keep multiple runs
+    filename = None
+    if seed is not None:
+        filename = f"{target}_cnn-lstm_seed{seed}_metrics.json"
     out_path = save_metrics(
         model_name='CNN-LSTM',
         target=target,
@@ -82,7 +113,8 @@ def train_and_evaluate(target: str = 'mood'):
         params=model.count_params(),
         train_seconds=train_seconds,
         metrics=metrics,
-        extra={'val_best_loss': float(np.min(history.history['val_loss']))}
+        extra={'val_best_loss': float(np.min(history.history.get('val_loss', [np.nan])))} ,
+        filename=filename
     )
     base_dir = os.path.dirname(out_path)
     model_path = os.path.join(base_dir, f"cnn_lstm_{target}.h5")

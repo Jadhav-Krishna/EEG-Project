@@ -10,16 +10,20 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, label_binarize
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_auc_score
 from sklearn.utils.class_weight import compute_class_weight
+import random
+import tensorflow as tf
 
 RANDOM_STATE = 42
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'processed_data.csv')
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), 'results')
 
 
-def load_data(target: str = 'mood', include_mean: bool = True, test_size: float = 0.25):
+def load_data(target: str = 'mood', include_mean: bool = True, test_size: float = 0.25,
+              include_aux_mood: bool = False):
     """Load processed_data.csv and return X_train, X_test, y_train, y_test, encoder, class_names.
-    target: one of 'mood', 'health_status', or 'disease'.
-    include_mean: include 'eeg_mean' as a feature along with eeg_1..eeg_14.
+    - target: one of 'mood', 'health_status', or 'disease'.
+    - include_mean: include 'eeg_mean' as a feature along with eeg_1..eeg_14.
+    - include_aux_mood: when True and 'mood' column exists, append one-hot mood features to X (useful for disease target).
     """
     df = pd.read_csv(DATA_PATH)
     # Features
@@ -27,6 +31,13 @@ def load_data(target: str = 'mood', include_mean: bool = True, test_size: float 
     if include_mean and 'eeg_mean' in df.columns:
         eeg_cols = eeg_cols + ['eeg_mean']
     X = df[eeg_cols].values.astype('float32')
+
+    # Optional auxiliary mood feature
+    if include_aux_mood and 'mood' in df.columns:
+        le_mood = LabelEncoder()
+        mood_ids = le_mood.fit_transform(df['mood'].astype(str).values)
+        mood_onehot = np.eye(len(le_mood.classes_), dtype='float32')[mood_ids]
+        X = np.hstack([X, mood_onehot])
 
     # Target
     if target not in df.columns:
@@ -118,3 +129,13 @@ def get_fit_kwargs(target: str, y_train: np.ndarray) -> Dict[str, Any]:
         class_weights = {int(c): float(w) for c, w in zip(classes, weights)}
         return {'class_weight': class_weights}
     return {}
+
+
+def set_global_seed(seed: int):
+    """Set Python, NumPy, and TensorFlow seeds for reproducibility."""
+    random.seed(seed)
+    np.random.seed(seed)
+    try:
+        tf.keras.utils.set_random_seed(seed)
+    except Exception:
+        tf.random.set_seed(seed)
