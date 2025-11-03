@@ -1,0 +1,129 @@
+{
+  "model": "Ensemble SoftVote (DNN+CNN+LSTM+RNN)",
+  "target": "disease",
+  "classes": [
+    "alzheimer",
+    "brain_stroke",
+    "brain_tumor",
+    "epilepsy",
+    "migraine",
+    "none",
+    "parkinson"
+  ],
+  "params": 0,
+  "train_seconds": 0.0,
+  "accuracy": 0.432,
+  "macro_f1": 0.2898769881328264,
+  "weighted_f1": 0.42525261382364227,
+  "macro_precision": 0.2878420312406487,
+  "macro_recall": 0.30200324459231875,
+  "roc_auc_ovr": 0.7417498248970128,
+  "confusion_matrix": [
+    [
+      9,
+      2,
+      5,
+      5,
+      1,
+      0,
+      1
+    ],
+    [
+      7,
+      5,
+      6,
+      3,
+      3,
+      0,
+      6
+    ],
+    [
+      4,
+      8,
+      6,
+      5,
+      2,
+      0,
+      4
+    ],
+    [
+      12,
+      3,
+      6,
+      3,
+      8,
+      0,
+      3
+    ],
+    [
+      2,
+      6,
+      4,
+      5,
+      4,
+      0,
+      3
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      78,
+      0
+    ],
+    [
+      8,
+      7,
+      5,
+      4,
+      4,
+      0,
+      3
+    ]
+  ],
+  "per_class": {
+    "alzheimer": {
+      "precision": 0.21428571428571427,
+      "recall": 0.391304347826087,
+      "f1": 0.27692307692307694
+    },
+    "brain_stroke": {
+      "precision": 0.16129032258064516,
+      "recall": 0.16666666666666666,
+      "f1": 0.16393442622950818
+    },
+    "brain_tumor": {
+      "precision": 0.1875,
+      "recall": 0.20689655172413793,
+      "f1": 0.19672131147540983
+    },
+    "epilepsy": {
+      "precision": 0.12,
+      "recall": 0.08571428571428572,
+      "f1": 0.1
+    },
+    "migraine": {
+      "precision": 0.18181818181818182,
+      "recall": 0.16666666666666666,
+      "f1": 0.17391304347826086
+    },
+    "none": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "parkinson": {
+      "precision": 0.15,
+      "recall": 0.0967741935483871,
+      "f1": 0.11764705882352941
+    }
+  },
+  "base_models": [
+    "dnn_baseline_disease.h5",
+    "cnn_1d_disease.h5",
+    "lstm_disease.h5",
+    "rnn_disease.h5"
+  ]
+}

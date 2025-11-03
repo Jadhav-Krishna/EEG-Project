@@ -7,12 +7,13 @@ from tensorflow.keras.models import load_model
 from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics, RESULTS_DIR
 
 
-MODELS = [
-    ('dnn_baseline.h5', False),
-    ('cnn_1d.h5', True),
-    ('lstm.h5', True),
-    ('rnn.h5', True),
-]
+def filenames_for_target(target: str):
+    return [
+        (f'dnn_baseline_{target}.h5', False),
+        (f'cnn_1d_{target}.h5', True),
+        (f'lstm_{target}.h5', True),
+        (f'rnn_{target}.h5', True),
+    ]
 
 
 def train_and_evaluate(target: str = 'mood'):
@@ -21,11 +22,11 @@ def train_and_evaluate(target: str = 'mood'):
     X_test_seq = shape_for_sequence(X_test)
 
     probs = []
-    for fname, is_seq in MODELS:
+    for fname, is_seq in filenames_for_target(target):
         path = os.path.join(RESULTS_DIR, fname)
         if not os.path.exists(path):
             continue
-        model = load_model(path)
+        model = load_model(path, compile=False)
         if is_seq:
             y_prob = model.predict(X_test_seq, verbose=0)
         else:
@@ -45,7 +46,7 @@ def train_and_evaluate(target: str = 'mood'):
         params=0,
         train_seconds=0.0,
         metrics=metrics,
-        extra={'base_models': [m for m, _ in MODELS]}
+        extra={'base_models': [m for m, _ in filenames_for_target(target)]}
     )
     return metrics
 

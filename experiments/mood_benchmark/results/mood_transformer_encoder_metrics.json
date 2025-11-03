@@ -1,0 +1,52 @@
+{
+  "model": "Transformer Encoder",
+  "target": "mood",
+  "classes": [
+    "happy",
+    "neutral",
+    "sad"
+  ],
+  "params": 10915,
+  "train_seconds": 4.21746826171875,
+  "accuracy": 0.68,
+  "macro_f1": 0.45986858399988345,
+  "weighted_f1": 0.6303317452685869,
+  "macro_precision": 0.4578947368421053,
+  "macro_recall": 0.4781144781144781,
+  "roc_auc_ovr": 0.7559390843325356,
+  "confusion_matrix": [
+    [
+      42,
+      0,
+      35
+    ],
+    [
+      2,
+      0,
+      27
+    ],
+    [
+      16,
+      0,
+      128
+    ]
+  ],
+  "per_class": {
+    "happy": {
+      "precision": 0.7,
+      "recall": 0.5454545454545454,
+      "f1": 0.6131386861313869
+    },
+    "neutral": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "sad": {
+      "precision": 0.6736842105263158,
+      "recall": 0.8888888888888888,
+      "f1": 0.7664670658682635
+    }
+  },
+  "val_best_loss": 0.7212819457054138
+}

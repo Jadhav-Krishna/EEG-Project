@@ -1,0 +1,124 @@
+{
+  "model": "RNN",
+  "target": "disease",
+  "classes": [
+    "alzheimer",
+    "brain_stroke",
+    "brain_tumor",
+    "epilepsy",
+    "migraine",
+    "none",
+    "parkinson"
+  ],
+  "params": 34375,
+  "train_seconds": 9.528298139572144,
+  "accuracy": 0.44,
+  "macro_f1": 0.24496755384181323,
+  "weighted_f1": 0.3891626069782752,
+  "macro_precision": 0.2339873780837636,
+  "macro_recall": 0.32205553424229805,
+  "roc_auc_ovr": 0.7283065199045738,
+  "confusion_matrix": [
+    [
+      17,
+      0,
+      6,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      11,
+      0,
+      17,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      13,
+      0,
+      12,
+      4,
+      0,
+      0,
+      0
+    ],
+    [
+      12,
+      0,
+      19,
+      4,
+      0,
+      0,
+      0
+    ],
+    [
+      8,
+      0,
+      12,
+      4,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      77,
+      0
+    ],
+    [
+      13,
+      0,
+      17,
+      1,
+      0,
+      0,
+      0
+    ]
+  ],
+  "per_class": {
+    "alzheimer": {
+      "precision": 0.22666666666666666,
+      "recall": 0.7391304347826086,
+      "f1": 0.3469387755102041
+    },
+    "brain_stroke": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "brain_tumor": {
+      "precision": 0.14457831325301204,
+      "recall": 0.41379310344827586,
+      "f1": 0.21428571428571427
+    },
+    "epilepsy": {
+      "precision": 0.26666666666666666,
+      "recall": 0.11428571428571428,
+      "f1": 0.16
+    },
+    "migraine": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "none": {
+      "precision": 1.0,
+      "recall": 0.9871794871794872,
+      "f1": 0.9935483870967742
+    },
+    "parkinson": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "val_best_loss": 1.3059533834457397
+}

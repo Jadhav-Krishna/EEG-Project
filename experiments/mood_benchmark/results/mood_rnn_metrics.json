@@ -1,0 +1,52 @@
+{
+  "model": "RNN",
+  "target": "mood",
+  "classes": [
+    "happy",
+    "neutral",
+    "sad"
+  ],
+  "params": 34115,
+  "train_seconds": 5.41091513633728,
+  "accuracy": 0.868,
+  "macro_f1": 0.6171220400728598,
+  "weighted_f1": 0.8162535519125683,
+  "macro_precision": 0.5815217391304347,
+  "macro_recall": 0.6574074074074074,
+  "roc_auc_ovr": 0.9754471420717324,
+  "confusion_matrix": [
+    [
+      77,
+      0,
+      0
+    ],
+    [
+      8,
+      0,
+      21
+    ],
+    [
+      3,
+      1,
+      140
+    ]
+  ],
+  "per_class": {
+    "happy": {
+      "precision": 0.875,
+      "recall": 1.0,
+      "f1": 0.9333333333333333
+    },
+    "neutral": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    },
+    "sad": {
+      "precision": 0.8695652173913043,
+      "recall": 0.9722222222222222,
+      "f1": 0.9180327868852459
+    }
+  },
+  "val_best_loss": 0.24552159011363983
+}

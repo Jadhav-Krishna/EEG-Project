@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, label_binarize
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_auc_score
+from sklearn.utils.class_weight import compute_class_weight
 
 RANDOM_STATE = 42
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'processed_data.csv')
@@ -100,8 +101,20 @@ def save_metrics(model_name: str, target: str, class_names: List[str], params: i
 
     os.makedirs(RESULTS_DIR, exist_ok=True)
     if filename is None:
-        filename = f"{model_name.lower().replace(' ', '_')}_metrics.json"
+        filename = f"{target}_{model_name.lower().replace(' ', '_')}_metrics.json"
     out_path = os.path.join(RESULTS_DIR, filename)
     with open(out_path, 'w') as f:
         json.dump(payload, f, indent=2)
     return out_path
+
+
+def get_fit_kwargs(target: str, y_train: np.ndarray) -> Dict[str, Any]:
+    """Return additional kwargs for model.fit based on target/task specifics.
+    - For 'disease', apply class weights to mitigate imbalance.
+    """
+    if target == 'disease':
+        classes = np.unique(y_train)
+        weights = compute_class_weight(class_weight='balanced', classes=classes, y=y_train)
+        class_weights = {int(c): float(w) for c, w in zip(classes, weights)}
+        return {'class_weight': class_weights}
+    return {}

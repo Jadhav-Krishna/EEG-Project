@@ -6,7 +6,7 @@ from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Dense, Dropout, LayerNormalization, MultiHeadAttention
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
-from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics
+from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics, get_fit_kwargs
 
 
 def transformer_block(x, num_heads=2, key_dim=16, ff_dim=64, rate=0.1):
@@ -47,13 +47,15 @@ def train_and_evaluate(target: str = 'mood'):
     ]
 
     start = time.time()
+    fit_kwargs = get_fit_kwargs(target, y_train)
     history = model.fit(
         X_train_seq, y_train,
         validation_split=0.2,
         epochs=60,
         batch_size=32,
         callbacks=callbacks,
-        verbose=0
+        verbose=0,
+        **fit_kwargs
     )
     train_seconds = time.time() - start
 
@@ -70,9 +72,9 @@ def train_and_evaluate(target: str = 'mood'):
         extra={'val_best_loss': float(np.min(history.history['val_loss']))}
     )
     base_dir = os.path.dirname(out_path)
-    model_path = os.path.join(base_dir, 'transformer_encoder.h5')
+    model_path = os.path.join(base_dir, f"transformer_encoder_{target}.h5")
     model.save(model_path)
-    model.save_weights(os.path.join(base_dir, 'transformer_encoder.weights.h5'))
+    model.save_weights(os.path.join(base_dir, f"transformer_encoder_{target}.weights.h5"))
     return metrics
 
 if __name__ == '__main__':
