@@ -1,0 +1,125 @@
+{
+  "model": "DNN (mood_encoded)",
+  "target": "disease",
+  "classes": [
+    "alzheimer",
+    "brain_stroke",
+    "brain_tumor",
+    "epilepsy",
+    "migraine",
+    "none",
+    "parkinson"
+  ],
+  "params": 184967,
+  "train_seconds": 7.863419055938721,
+  "accuracy": 0.428,
+  "macro_f1": 0.27787859329778425,
+  "weighted_f1": 0.41981649403947624,
+  "macro_precision": 0.2976646555275587,
+  "macro_recall": 0.29461484695440293,
+  "roc_auc_ovr": 0.7221091591053211,
+  "confusion_matrix": [
+    [
+      10,
+      4,
+      2,
+      4,
+      2,
+      0,
+      1
+    ],
+    [
+      14,
+      1,
+      1,
+      8,
+      4,
+      0,
+      2
+    ],
+    [
+      8,
+      1,
+      5,
+      8,
+      7,
+      0,
+      0
+    ],
+    [
+      14,
+      1,
+      2,
+      7,
+      9,
+      0,
+      2
+    ],
+    [
+      6,
+      3,
+      2,
+      6,
+      3,
+      0,
+      4
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      78,
+      0
+    ],
+    [
+      10,
+      3,
+      4,
+      4,
+      7,
+      0,
+      3
+    ]
+  ],
+  "per_class": {
+    "alzheimer": {
+      "precision": 0.16129032258064516,
+      "recall": 0.43478260869565216,
+      "f1": 0.23529411764705882
+    },
+    "brain_stroke": {
+      "precision": 0.07692307692307693,
+      "recall": 0.03333333333333333,
+      "f1": 0.046511627906976744
+    },
+    "brain_tumor": {
+      "precision": 0.3125,
+      "recall": 0.1724137931034483,
+      "f1": 0.2222222222222222
+    },
+    "epilepsy": {
+      "precision": 0.1891891891891892,
+      "recall": 0.2,
+      "f1": 0.19444444444444445
+    },
+    "migraine": {
+      "precision": 0.09375,
+      "recall": 0.125,
+      "f1": 0.10714285714285714
+    },
+    "none": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "parkinson": {
+      "precision": 0.25,
+      "recall": 0.0967741935483871,
+      "f1": 0.13953488372093023
+    }
+  },
+  "source": "processed_data: eeg_1..14 + mood_encoded",
+  "val_best_loss": 1.384243130683899
+}

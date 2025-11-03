@@ -7,7 +7,7 @@ This report compares multiple deep learning methods trained on `data/processed_d
 - Metrics reported: Accuracy, F1 (macro), ROC-AUC (OvR); per-class precision/recall/f1 available inside each metrics JSON
 - Models included: DNN Baseline, CNN 1D, RNN, LSTM, CNN-LSTM, Transformer Encoder, Ensemble SoftVote (DNN+CNN+LSTM) and Ensemble SoftVote (DNN+CNN+LSTM+RNN)
 
-Generated on: 2025-11-03T08:14:15.775837Z
+Generated on: 2025-11-03T08:43:00.722710Z
 
 
 ## Mood — Summary
@@ -71,6 +71,7 @@ Main method = LSTM (best F1 0.949, Accuracy 97.20%).
 | DNN Baseline | 43.60% | 0.298 | 0.305 | 0.293 | 0.742645123382245 | 47495 | 4.71 |
 | Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 43.20% | 0.288 | 0.302 | 0.290 | 0.7417498248970128 | 0 | 0.00 |
 | Transformer Encoder | 44.00% | 0.274 | 0.309 | 0.281 | 0.7486611798187888 | 11175 | 10.07 |
+| DNN (mood_encoded) | 42.80% | 0.298 | 0.295 | 0.278 | 0.7221091591053211 | 184967 | 7.86 |
 | RNN | 44.00% | 0.234 | 0.322 | 0.245 | 0.7283065199045738 | 34375 | 9.53 |
 | LSTM | 42.40% | 0.234 | 0.282 | 0.208 | 0.7405312986642506 | 121351 | 9.15 |
 
@@ -82,6 +83,7 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 - CNN-LSTM vs DNN Baseline: ΔAccuracy +1.20 pts, ΔF1 +0.005.
 - CNN-LSTM vs Ensemble SoftVote (DNN+CNN+LSTM+RNN): ΔAccuracy +1.60 pts, ΔF1 +0.009.
 - CNN-LSTM vs Transformer Encoder: ΔAccuracy +0.80 pts, ΔF1 +0.017.
+- CNN-LSTM vs DNN (mood_encoded): ΔAccuracy +2.00 pts, ΔF1 +0.021.
 - CNN-LSTM vs RNN: ΔAccuracy +0.80 pts, ΔF1 +0.054.
 - CNN-LSTM vs LSTM: ΔAccuracy +2.40 pts, ΔF1 +0.091.
 
@@ -89,6 +91,7 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 
 ![confusion_cnn_1d.png](../../graphs/disease_benchmark/confusion_cnn_1d.png)
 ![confusion_cnn_lstm.png](../../graphs/disease_benchmark/confusion_cnn_lstm.png)
+![confusion_disease_dnn_moodencoded.png](../../graphs/disease_benchmark/confusion_disease_dnn_moodencoded.png)
 ![confusion_dnn_baseline.png](../../graphs/disease_benchmark/confusion_dnn_baseline.png)
 ![confusion_ensemble_dnn_cnn_lstm.png](../../graphs/disease_benchmark/confusion_ensemble_dnn_cnn_lstm.png)
 ![confusion_ensemble_dnn_cnn_lstm_rnn.png](../../graphs/disease_benchmark/confusion_ensemble_dnn_cnn_lstm_rnn.png)
@@ -97,6 +100,7 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 ![confusion_transformer_encoder.png](../../graphs/disease_benchmark/confusion_transformer_encoder.png)
 ![pr_cnn_1d.png](../../graphs/disease_benchmark/pr_cnn_1d.png)
 ![pr_cnn_lstm.png](../../graphs/disease_benchmark/pr_cnn_lstm.png)
+![pr_disease_dnn_moodencoded.png](../../graphs/disease_benchmark/pr_disease_dnn_moodencoded.png)
 ![pr_dnn_baseline.png](../../graphs/disease_benchmark/pr_dnn_baseline.png)
 ![pr_ensemble_dnn_cnn_lstm.png](../../graphs/disease_benchmark/pr_ensemble_dnn_cnn_lstm.png)
 ![pr_ensemble_dnn_cnn_lstm_rnn.png](../../graphs/disease_benchmark/pr_ensemble_dnn_cnn_lstm_rnn.png)
@@ -105,6 +109,7 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 ![pr_transformer_encoder.png](../../graphs/disease_benchmark/pr_transformer_encoder.png)
 ![roc_cnn_1d.png](../../graphs/disease_benchmark/roc_cnn_1d.png)
 ![roc_cnn_lstm.png](../../graphs/disease_benchmark/roc_cnn_lstm.png)
+![roc_disease_dnn_moodencoded.png](../../graphs/disease_benchmark/roc_disease_dnn_moodencoded.png)
 ![roc_dnn_baseline.png](../../graphs/disease_benchmark/roc_dnn_baseline.png)
 ![roc_ensemble_dnn_cnn_lstm.png](../../graphs/disease_benchmark/roc_ensemble_dnn_cnn_lstm.png)
 ![roc_ensemble_dnn_cnn_lstm_rnn.png](../../graphs/disease_benchmark/roc_ensemble_dnn_cnn_lstm_rnn.png)
@@ -153,6 +158,11 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 
 - Classes: alzheimer, brain_stroke, brain_tumor, epilepsy, migraine, none, parkinson
 - Best validation loss: 1.3878
+
+### DNN (mood_encoded) (disease)
+
+- Classes: alzheimer, brain_stroke, brain_tumor, epilepsy, migraine, none, parkinson
+- Best validation loss: 1.3842
 
 ### Ensemble SoftVote (DNN+CNN+LSTM+RNN) (disease)
 
