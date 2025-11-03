@@ -11,7 +11,7 @@ from tensorflow.keras.optimizers.schedules import CosineDecayRestarts
 from .utils import load_data, shape_for_sequence, compute_metrics, save_metrics, get_fit_kwargs, set_global_seed
 
 
-def build_model(timesteps: int, num_classes: int) -> Model:
+def build_model(timesteps: int, num_classes: int, target: str = 'mood') -> Model:
     inp = Input(shape=(timesteps, 1))
     x = Conv1D(128, 3, padding='same')(inp)
     x = BatchNormalization()(x)
@@ -30,10 +30,12 @@ def build_model(timesteps: int, num_classes: int) -> Model:
     x = MaxPooling1D(pool_size=2)(x)
     x = Dropout(0.3)(x)
 
-    # Deeper BiLSTM head
-    x = Bidirectional(LSTM(96, return_sequences=True))(x)
+    # Deeper BiLSTM head (slightly larger for mood)
+    head1_units = 128 if target == 'mood' else 96
+    head2_units = 96 if target == 'mood' else 64
+    x = Bidirectional(LSTM(head1_units, return_sequences=True))(x)
     x = Dropout(0.3)(x)
-    x = Bidirectional(LSTM(64, return_sequences=False))(x)
+    x = Bidirectional(LSTM(head2_units, return_sequences=False))(x)
     x = Dropout(0.3)(x)
     x = Dense(128, activation='relu')(x)
     x = Dropout(0.3)(x)
@@ -68,7 +70,7 @@ def train_and_evaluate(target: str = 'mood', seed: int | None = None):
     X_train_seq = shape_for_sequence(X_train)
     X_test_seq = shape_for_sequence(X_test)
 
-    model = build_model(X_train_seq.shape[1], len(class_names))
+    model = build_model(X_train_seq.shape[1], len(class_names), target=target)
     # Optimizer with weight decay and cosine restarts
     lr_schedule = CosineDecayRestarts(initial_learning_rate=1e-3, first_decay_steps=200, t_mul=2.0, m_mul=0.8, alpha=1e-4)
     optimizer = AdamW(learning_rate=lr_schedule, weight_decay=1e-5)
@@ -76,17 +78,19 @@ def train_and_evaluate(target: str = 'mood', seed: int | None = None):
 
     # Save best weights by validation accuracy to push top-line accuracy higher.
     weights_path = os.path.join(os.path.dirname(__file__), 'results', f"cnn_lstm_{target}.weights.h5")
+    patience = 30 if target == 'mood' else 20
     callbacks = [
-        EarlyStopping(monitor='val_accuracy', patience=15, restore_best_weights=True),
+        EarlyStopping(monitor='val_accuracy', patience=patience, restore_best_weights=True),
         ModelCheckpoint(weights_path, monitor='val_accuracy', save_best_only=True, save_weights_only=True)
     ]
 
     start = time.time()
     fit_kwargs = get_fit_kwargs(target, y_train)
+    epochs = 300 if target == 'mood' else 200
     history = model.fit(
         X_train_seq, y_train,
         validation_split=0.2,
-        epochs=150,
+        epochs=epochs,
         batch_size=32,
         callbacks=callbacks,
         verbose=0,

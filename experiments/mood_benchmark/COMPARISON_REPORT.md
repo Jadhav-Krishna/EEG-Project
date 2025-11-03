@@ -7,7 +7,7 @@ This report compares multiple deep learning methods trained on `data/processed_d
 - Metrics reported: Accuracy, F1 (macro), ROC-AUC (OvR); per-class precision/recall/f1 available inside each metrics JSON
 - Models included: DNN Baseline, CNN 1D, RNN, LSTM, CNN-LSTM, Transformer Encoder, Ensemble SoftVote (DNN+CNN+LSTM) and Ensemble SoftVote (DNN+CNN+LSTM+RNN)
 
-Generated on: 2025-11-03T08:43:00.722710Z
+Generated on: 2025-11-03T08:57:18.639120Z
 
 
 ## Mood — Summary
@@ -66,8 +66,8 @@ Main method = LSTM (best F1 0.949, Accuracy 97.20%).
 
 | Model | Accuracy | Precision | Recall | F1 | ROC-AUC (OvR) | Params | Train Time (s) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CNN-LSTM | 44.80% | 0.317 | 0.303 | 0.299 | 0.7334092895678498 | 570503 | 22.97 |
 | CNN 1D | 44.00% | 0.299 | 0.308 | 0.297 | 0.7334044128730083 | 17735 | 5.74 |
+| CNN-LSTM | 44.40% | 0.336 | 0.308 | 0.295 | 0.7332426344488604 | 447111 | 12.19 |
 | DNN Baseline | 43.60% | 0.298 | 0.305 | 0.293 | 0.742645123382245 | 47495 | 4.71 |
 | Ensemble SoftVote (DNN+CNN+LSTM+RNN) | 43.20% | 0.288 | 0.302 | 0.290 | 0.7417498248970128 | 0 | 0.00 |
 | Transformer Encoder | 44.00% | 0.274 | 0.309 | 0.281 | 0.7486611798187888 | 11175 | 10.07 |
@@ -77,15 +77,15 @@ Main method = LSTM (best F1 0.949, Accuracy 97.20%).
 
 ### Disease — Head-to-head (top vs others)
 
-Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
+Main method = CNN 1D (best F1 0.297, Accuracy 44.00%).
 
-- CNN-LSTM vs CNN 1D: ΔAccuracy +0.80 pts, ΔF1 +0.001.
-- CNN-LSTM vs DNN Baseline: ΔAccuracy +1.20 pts, ΔF1 +0.005.
-- CNN-LSTM vs Ensemble SoftVote (DNN+CNN+LSTM+RNN): ΔAccuracy +1.60 pts, ΔF1 +0.009.
-- CNN-LSTM vs Transformer Encoder: ΔAccuracy +0.80 pts, ΔF1 +0.017.
-- CNN-LSTM vs DNN (mood_encoded): ΔAccuracy +2.00 pts, ΔF1 +0.021.
-- CNN-LSTM vs RNN: ΔAccuracy +0.80 pts, ΔF1 +0.054.
-- CNN-LSTM vs LSTM: ΔAccuracy +2.40 pts, ΔF1 +0.091.
+- CNN 1D vs CNN-LSTM: ΔAccuracy -0.40 pts, ΔF1 +0.002.
+- CNN 1D vs DNN Baseline: ΔAccuracy +0.40 pts, ΔF1 +0.004.
+- CNN 1D vs Ensemble SoftVote (DNN+CNN+LSTM+RNN): ΔAccuracy +0.80 pts, ΔF1 +0.007.
+- CNN 1D vs Transformer Encoder: ΔAccuracy +0.00 pts, ΔF1 +0.016.
+- CNN 1D vs DNN (mood_encoded): ΔAccuracy +1.20 pts, ΔF1 +0.019.
+- CNN 1D vs RNN: ΔAccuracy +0.00 pts, ΔF1 +0.052.
+- CNN 1D vs LSTM: ΔAccuracy +1.60 pts, ΔF1 +0.089.
 
 ### Disease — Graphs
 
@@ -137,17 +137,17 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 ### CNN-LSTM (disease)
 
 - Classes: alzheimer, brain_stroke, brain_tumor, epilepsy, migraine, none, parkinson
-- Best validation loss: 0.9140
+- Best validation loss: 0.9964
 
 ### CNN-LSTM (disease)
 
 - Classes: alzheimer, brain_stroke, brain_tumor, epilepsy, migraine, none, parkinson
-- Best validation loss: 0.8999
+- Best validation loss: 0.9648
 
 ### CNN-LSTM (disease)
 
 - Classes: alzheimer, brain_stroke, brain_tumor, epilepsy, migraine, none, parkinson
-- Best validation loss: 0.9175
+- Best validation loss: 0.9873
 
 ### CNN 1D (disease)
 
@@ -212,17 +212,17 @@ Main method = CNN-LSTM (best F1 0.299, Accuracy 44.80%).
 ### CNN-LSTM (mood)
 
 - Classes: happy, neutral, sad
-- Best validation loss: 0.1776
+- Best validation loss: 0.1468
 
 ### CNN-LSTM (mood)
 
 - Classes: happy, neutral, sad
-- Best validation loss: 0.1326
+- Best validation loss: 0.1285
 
 ### CNN-LSTM (mood)
 
 - Classes: happy, neutral, sad
-- Best validation loss: 0.1721
+- Best validation loss: 0.1553
 
 ### CNN 1D (mood)
 

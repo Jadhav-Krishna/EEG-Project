@@ -97,7 +97,11 @@ def predict_with_weights(model_key, target, X, X_seq, num_classes):
     if not os.path.exists(weights_path):
         raise FileNotFoundError(weights_path)
     if is_seq:
-        model = module.build_model(X_seq.shape[1], num_classes)
+        # CNN-LSTM has target-dependent architecture; propagate target for shape parity with saved weights
+        if model_key == 'cnn_lstm':
+            model = module.build_model(X_seq.shape[1], num_classes, target=target)
+        else:
+            model = module.build_model(X_seq.shape[1], num_classes)
         model.load_weights(weights_path)
         prob = model.predict(X_seq, verbose=0)
     else:

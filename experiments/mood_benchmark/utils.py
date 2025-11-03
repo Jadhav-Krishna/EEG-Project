@@ -7,6 +7,7 @@ from typing import Tuple, List, Dict, Any
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder, label_binarize
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix, roc_auc_score
 from sklearn.utils.class_weight import compute_class_weight
@@ -19,7 +20,7 @@ RESULTS_DIR = os.path.join(os.path.dirname(__file__), 'results')
 
 
 def load_data(target: str = 'mood', include_mean: bool = True, test_size: float = 0.25,
-              include_aux_mood: bool = False):
+              include_aux_mood: bool = False, standardize: bool = True):
     """Load processed_data.csv and return X_train, X_test, y_train, y_test, encoder, class_names.
     - target: one of 'mood', 'health_status', or 'disease'.
     - include_mean: include 'eeg_mean' as a feature along with eeg_1..eeg_14.
@@ -50,6 +51,12 @@ def load_data(target: str = 'mood', include_mean: bool = True, test_size: float 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=test_size, stratify=y, random_state=RANDOM_STATE
     )
+
+    # Standardize features (fit on train, apply to test) for better optimization
+    if standardize:
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
     return X_train, X_test, y_train, y_test, encoder, class_names
 
 
